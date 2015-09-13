@@ -61,6 +61,7 @@
     </Compile>
     <Compile Include="Sort\BubbleSort.cs" />
     <Compile Include="Sort\ISort.cs" />
+    <Compile Include="Sort\СountSort.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

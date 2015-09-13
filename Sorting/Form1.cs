@@ -19,13 +19,22 @@ namespace Sorting
         int[] ControlArray;
         List<SortObject> SortObjects;
         private ManualResetEvent waitHandle;
-        Thread SortThread;
+        List<Thread> SortThreads;
+        int ThreadWork;
+        int MaxThreadWork;
+
         public Form1()
         {
             InitializeComponent();
             SortObjects = new List<SortObject>();
             BubbleSort BubbleSorting = new BubbleSort();
-            SortObjects.Add(new SortObject(BubbleSorting, 2));
+            SortObjects.Add(new SortObject(BubbleSorting, 1));
+
+            ThreadWork = 0;
+            MaxThreadWork = 1;
+
+            Sort.СountSort CountSorting = new Sort.СountSort();
+            SortObjects.Add(new SortObject(CountSorting, 1));
             waitHandle = new ManualResetEvent(false);
         }
 
@@ -51,23 +60,68 @@ namespace Sorting
         {
             if (Mas != null)
             {
-                SortObjects[0].SetArrays(Mas, ControlArray);
+                SortThreads = new List<Thread>();
+                foreach (SortObject sortObject in SortObjects)
+                {
+                    sortObject.SetArrays(Mas, ControlArray);
+                    SortThreads.Add(new Thread(sortObject.StartSort));
+                }
+               
+                
 
                 timer1.Start();
-                SortThread = new Thread(SortObjects[0].StartSort);
-                SortThread.Start();
+                timer2.Start();
             }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             progressBar1.Increment(1);
-            if (SortThread.ThreadState == ThreadState.Stopped)
+            List<SortView> ls=new List<SortView>();
+            int k = 0;
+            foreach (SortObject sortObject in SortObjects)
             {
-                progressBar1.Value = progressBar1.Maximum;
-                sortView1.Controls.Find("SortName", false)[0].Text = "ghfg";
-                sortView1.Controls.Find("PerformansPoints", false)[0].Text = "" + SortObjects[0].PerformancePoints;
-                sortView1.Controls.Find("IsValid", false)[0].Text = "" + SortObjects[0].SortIsValid;
+                if (sortObject.IsComplete)
+                {
+                    k++;
+                    ls.Add(new SortView());
+                    ls[ls.Count - 1].Top=5 + 80 * (k - 1);
+                    ls[ls.Count-1].Controls.Find("SortName", false)[0].Text = "ghfg";
+                    ls[ls.Count - 1].Controls.Find("PerformansPoints", false)[0].Text = "" + sortObject.PerformancePoints;
+                    ls[ls.Count - 1].Controls.Find("IsValid", false)[0].Text = "" + sortObject.SortIsValid;
+                }
+            }
+            label1.Text = "" + k;
+            label2.Text = "" + ThreadWork;
+            listBox1.Controls.AddRange(ls.ToArray());
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            CountThreadWork();
+            foreach (Thread sortThread in SortThreads)
+            {
+                
+                if (sortThread.ThreadState == ThreadState.Unstarted)
+                {
+                    if (ThreadWork < MaxThreadWork)
+                    {
+                        sortThread.Start();
+                        ++ThreadWork;
+                    }
+                }
+            }
+        }
+
+        private void CountThreadWork()
+        {
+            ThreadWork = 0;
+            foreach (Thread sortThread in SortThreads)
+            {
+                if (sortThread.ThreadState == ThreadState.Running)
+                {
+                    ++ThreadWork;
+                }
             }
         }
     }

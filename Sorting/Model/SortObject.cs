@@ -12,6 +12,7 @@ namespace Sorting.Model
         private ISort Sort;
         private int Interval;
         public bool SortIsValid;
+        public bool IsComplete;
         public int[] OriginalArray { get; set; }
         public int[] ControlArray { get; set; }
         public int[] ResultArray { get; private set; }
@@ -24,6 +25,7 @@ namespace Sorting.Model
             OriginalArray = new int[0];
             ControlArray = new int[0];
             ResultArray = new int[0];
+            IsComplete = false;
         }
 
         public void SetArrays(int[] originalArray,int[] controlArray)
@@ -47,6 +49,7 @@ namespace Sorting.Model
                 PerformancePoints++;
             }
             SortIsValid = CompareArrays();
+            IsComplete = true;
         }
 
         private bool CompareArrays()

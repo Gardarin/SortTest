@@ -6,8 +6,24 @@ using System.Threading.Tasks;
 
 namespace Sorting.Sort
 {
-    public class СountSort:ISort
+    class CountSort:ISort
     {
+        public string Name
+        {
+            get
+            {
+                return "CountSort";
+            }
+            set
+            {
+            }
+        }
+
+        public CountSort()
+        {
+            Name = "CountSort";
+        }
+
         public void Sort(int[] resultArray)
         {
             int[] arrayCount = new int[resultArray.Length];

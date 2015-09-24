@@ -9,6 +9,8 @@ namespace Sorting.Sort
 {
     public interface ISort
     {
+        string Name { get; set; }
+
         void Sort(int[] resultArray);
     }
 }

@@ -34,12 +34,18 @@ namespace Sorting.Model
             ControlArray = controlArray;
         }
 
+        public string GetName()
+        {
+            return Sort.Name;
+        }
+
         public void StartSort()
         {
             SortIsValid = false;
             PerformancePoints = 0;
-            DateTime StartTime = DateTime.Now;
             TimeSpan t = new TimeSpan(0, 0, Interval, 0, 0);
+            DateTime StartTime = DateTime.Now;
+            
             while (DateTime.Now - StartTime < t)
             {
                 ResultArray = new int[OriginalArray.Length];

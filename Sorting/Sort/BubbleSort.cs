@@ -8,6 +8,22 @@ namespace Sorting.Sort
 {
     class BubbleSort:ISort
     {
+        public string Name
+        {
+            get
+            {
+                return "BubblesSort";
+            }
+            set
+            {
+            }
+        }
+
+        public BubbleSort()
+        {
+            Name = "BubblesSort";
+        }
+
         public void Sort(int[] resultArray)
         {
             int n=resultArray.Length;
